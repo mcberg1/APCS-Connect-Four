@@ -7,10 +7,12 @@ public class ConnectFourGame {
     private boolean turn = false;
     private boolean running = true;
     private int toWin = 4;
+
     ConnectFourGame() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
-                Board[i][j] = new Disc(discArrayHelper(i, j - 1), discArrayHelper(i, j + 1), discArrayHelper(i - 1, j), discArrayHelper(i - 1, j - 1), discArrayHelper(i - 1, j + 1));
+                //  Board[i][j] = new Disc(discArrayHelper(i, j - 1), discArrayHelper(i, j + 1), discArrayHelper(i - 1, j), discArrayHelper(i - 1, j - 1), discArrayHelper(i - 1, j + 1));
+                Board[i][j] = new Disc();
             }
         }
     }
@@ -84,13 +86,24 @@ public class ConnectFourGame {
     }
 
     public Disc discArrayHelper(int i, int j) {
-        try {
+        if (i < Board.length && i > 0 && j < Board[0].length && j > 0)
             return Board[i][j];
-        } catch (Exception e) {
+        else
             return null;
-        }
     }
 
+    public boolean checkWin(int x, int y) {
+        Disc lastPlayed = Board[x][y];
+        boolean ownerPlayer = lastPlayed.getPlayer();
+        for (int dir = 0; dir < 4; dir++) {
+            boolean win = true;
+            for (int i = -3; i < 6; i++) {
+
+            }
+        }
+        return true; //i dont like errors and im not done yet 
+    }
+    /*
     public boolean checkWin(int i, int j) {
         Disc checking = Board[i][j];
         int initialDir = checking.checkAllAdjacentDiscs(0);
@@ -113,5 +126,5 @@ public class ConnectFourGame {
         return false;
 
     }
-
+    */
 }

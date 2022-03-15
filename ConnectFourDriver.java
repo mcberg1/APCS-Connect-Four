@@ -1,7 +1,6 @@
 package ConnFour;
 
 import java.util.Scanner;
-import java.util.Date;
 public class ConnectFourDriver {
 
     public static void main(String[] args) {
@@ -14,7 +13,7 @@ public class ConnectFourDriver {
             int selectedColumn = input.nextInt();
             if (selectedColumn > game.numColumns() || selectedColumn < 1)
                 for (int i = 0; i < 100; i++)
-                    System.out.println("bruh");
+                    System.out.println("\u001B" + "bruh");
             else {
                 if (!game.addDisc(selectedColumn-1, game.getTurn()))
                     System.out.println("Column " + selectedColumn + " full");
