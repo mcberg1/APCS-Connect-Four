@@ -6,20 +6,12 @@ public class ConnectFourGame {
     private int Places[] = new int[Board[0].length];
     private boolean turn = false;
     private boolean running = true;
-    private int toWin = 4;
+
     ConnectFourGame() {
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
-                Board[i][j] = new Disc(discArrayHelper(i, j - 1), discArrayHelper(i, j + 1), discArrayHelper(i - 1, j), discArrayHelper(i - 1, j - 1), discArrayHelper(i - 1, j + 1));
+                Board[i][j] = new Disc();
             }
-        }
-    }
-
-    public void generateRandomBoard() {
-        for (Disc[] row : Board) {
-            for (Disc disc : row)
-                if (Math.random() > 0.5)
-                    disc.setPlayer(Math.random() > 0.5);
         }
     }
 
@@ -39,12 +31,23 @@ public class ConnectFourGame {
         }
     }
 
-    public void clearBoard() {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                Board[i][j] = new Disc();
+    @Override
+    public String toString() {
+        String output = "";
+        for (int i = 0; i < 5; i++)
+            output += "\n";
+        for (int i = 0; i < 30; i++)
+            output += ("-");
+        output += "\n";
+        for (int i = Board.length - 1; i >= 0; i--) {
+            for (Disc disc : Board[i]) {
+                output += ("| ");
+                output += (disc.isPlayerSet() ? disc.getPlayer() ? "x" : "o" : " ");
+                output += (" ");
             }
+            output += "\n";
         }
+        return output;
     }
 
     public boolean addDisc(int col, boolean player) {
@@ -52,10 +55,12 @@ public class ConnectFourGame {
             //System.out.println("Column " + col + " is full...");
             return false;
         }
-        Board[Places[col]][col].setPlayer(player);
-        checkWin(Places[col], col);
+        Disc disc = Board[Places[col]][col];
+        disc.setPlayer(player);
+        if (checkWin(player))
+            System.out.println("Player " + disc.getPlayer() + " wins");
+        System.exit(0);
         Places[col]++;
-
         return true;
     }
 
@@ -67,51 +72,59 @@ public class ConnectFourGame {
         return turn;
     }
 
-    public void stop() {
-        running = false;
-    }
-
     public int numColumns() {
         return Board[0].length;
-    }
-
-    public int numRows() {
-        return Board.length;
     }
 
     public void toggleTurn() {
         turn = !turn;
     }
 
-    public Disc discArrayHelper(int i, int j) {
-        try {
-            return Board[i][j];
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public boolean checkWin(int i, int j) {
-        Disc checking = Board[i][j];
-        int initialDir = checking.checkAllAdjacentDiscs(0);
-        if (initialDir != -1) {
-            for (int dir = initialDir; dir < 5; dir++) {
-                try {
-                    for (int k = 0; k < toWin - 1; k++)
-                        checking = checking.checkAdjacentDisc(dir);
-                    if (checking._playerSet) {
-                        System.out.println("win");
-                        return true;
-                    }
-                } catch (Exception e) {
-                    System.out.println("no win");
-                    return false;
+    public boolean checkWin(boolean player) {
+        //Horizontal
+        for (int j = 0; j < (Board.length) - 3; j++) {
+            for (int i = 0; i < (Board[0].length); i++) {
+                if (Board[i][j].isPlayerSet() && Board[i][j].getPlayer() == player
+                        && Board[i][j + 1].isPlayerSet() && Board[i][j + 1].getPlayer() == player
+                        && Board[i][j + 2].isPlayerSet() && Board[i][j + 2].getPlayer() == player
+                        && Board[i][j + 3].isPlayerSet() && Board[i][j + 3].getPlayer() == player) {
+                    return true;
                 }
             }
         }
-        System.out.println("no neighbors");
+        //Vertical
+        for (int i = 0; i < (Board[0].length) - 3; i++) {
+            for (int j = 0; j < (Board.length); j++) {
+                if (Board[i][j].isPlayerSet() && Board[i][j].getPlayer() == player
+                        && Board[i + 1][j].isPlayerSet() && Board[i + 1][j].getPlayer() == player
+                        && Board[i + 2][j].isPlayerSet() && Board[i + 2][j].getPlayer() == player
+                        && Board[i + 3][j].isPlayerSet() && Board[i + 3][j].getPlayer() == player) {
+                    return true;
+                }
+            }
+        }
+        //Up Right
+        for (int i = 3; i < (Board[0].length); i++) {
+            for (int j = 0; j < (Board.length) - 3; j++) {
+                if (Board[i][j].isPlayerSet() && Board[i][j].getPlayer() == player
+                        && Board[i - 1][j + 1].isPlayerSet() && Board[i - 1][j + 1].getPlayer() == player
+                        && Board[i - 2][j + 2].isPlayerSet() && Board[i - 2][j + 2].getPlayer() == player
+                        && Board[i - 3][j + 3].isPlayerSet() && Board[i - 3][j + 3].getPlayer() == player)
+                    return true;
+            }
+        }
+        //Down Right
+        for (int i = 3; i < (Board[0].length); i++) {
+            for (int j = 3; j < (Board.length); j++) {
+                if (Board[i][j].isPlayerSet() && Board[i][j].getPlayer() == player
+                        && Board[i - 1][j - 1].isPlayerSet() && Board[i - 1][j - 1].getPlayer() == player
+                        && Board[i - 2][j - 2].isPlayerSet() && Board[i - 2][j - 2].getPlayer() == player
+                        && Board[i - 3][j - 3].isPlayerSet() && Board[i - 3][j - 3].getPlayer() == player)
+                    return true;
+            }
+        }
         return false;
-
     }
 
 }
+

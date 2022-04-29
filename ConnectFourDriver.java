@@ -1,7 +1,6 @@
 package ConnFour;
 
 import java.util.Scanner;
-import java.util.Date;
 public class ConnectFourDriver {
 
     public static void main(String[] args) {
@@ -9,17 +8,19 @@ public class ConnectFourDriver {
         Scanner input = new Scanner(System.in);
 
         while (game.isRunning()) {
-            game.printBoard();
+            //game.printBoard();
+            System.out.println(game);
             System.out.print("Player " + (game.getTurn() ? "2" : "1") + " turn, which column?");
             int selectedColumn = input.nextInt();
             if (selectedColumn > game.numColumns() || selectedColumn < 1)
                 for (int i = 0; i < 100; i++)
-                    System.out.println("bruh");
+                    System.out.println("\u001B" + "bruh");
             else {
                 if (!game.addDisc(selectedColumn-1, game.getTurn()))
                     System.out.println("Column " + selectedColumn + " full");
                     game.toggleTurn();
             }
+
             //delay(1000);
         }
     }
